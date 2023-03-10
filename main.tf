@@ -56,6 +56,8 @@ resource "docker_container" "zabbix_java_gateway" {
   }
   restart = "unless-stopped"
 
+  depends_on = [docker_container.mysql-server]
+
 }
 
 resource "docker_container" "zabbix_server_mysql" {
@@ -78,6 +80,8 @@ resource "docker_container" "zabbix_server_mysql" {
   ]
   restart = "unless-stopped"
 
+  depends_on = [docker_container.zabbix_java_gateway]
+
 }
 
 resource "docker_container" "zabbix_web_nginx_mysql" {
@@ -87,8 +91,8 @@ resource "docker_container" "zabbix_web_nginx_mysql" {
     name = docker_network.private_network.name
   }
   ports {
-    internal = 80
-    external = 7777
+    internal = 8080
+    external = 80
   }
   env = [
     "ZBX_SERVER_HOST=zabbix-server-mysql",
@@ -99,6 +103,8 @@ resource "docker_container" "zabbix_web_nginx_mysql" {
     "MYSQL_ROOT_PASSWORD=root_pwd"
   ]
   restart = "unless-stopped"
+
+  depends_on = [docker_container.zabbix_server_mysql]
 
 }
 

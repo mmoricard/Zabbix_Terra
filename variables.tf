@@ -1,7 +1,7 @@
 variable "mysql_container_name" {
   type        = string
   description = "name of the container"
-  default     = "mysql_server"
+  default     = "mysql-server"
 }
 
 variable "zabbix_java_gw_container_name" {
